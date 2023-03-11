@@ -25,6 +25,7 @@ sprPlayer:setGroups({1})
 sprInteract:setGroups({2})
 sprPlayer:add()
 sprInteract:add()
+sprPlayer.name = "Player"
 local direction = 1
 local frame = 1
 local xVel, yVel = 0,0
@@ -71,6 +72,7 @@ function playerUpdate()
         direction = newDir
         inDirX = inX
         inDirY = inY
+        sprPlayer:setZIndex(sprPlayer.y + 10)
     end
 
     sprInteract:moveTo(sprPlayer.x + inDirX * 40, sprPlayer.y - 10 + inDirY * 30)
@@ -83,17 +85,34 @@ function playerUpdate()
             else
                 grabbed = nil
             end
-        elseif grabbed then
+        elseif grabbed and #sprInteract:overlappingSprites() < 1 then
+            local yExtra = 0
+            grabbed.fall = -12
+--            grabbed.velX = xVel
+--            grabbed.velY = yVel
+            if inDirY > 0 then yExtra =  12 grabbed.fall = 0 end
+            grabbed:moveTo(sprInteract.x + inDirX * 5,sprInteract.y + inDirY * 5 + yExtra)
             grabbed:setCollisionsEnabled(true)
             grabbed = nil
         end
     end
+
+--    if playdate.buttonJustPressed(playdate.kButtonB) and grabbed and #sprInteract:overlappingSprites() < 1 then
+--        local yExtra = 0
+--        if inDirY > 0 then yExtra =  12 end
+--        grabbed.fall = -12
+--        grabbed.velX = inDirX * 12
+--        grabbed.velY = inDirY * 12
+--        grabbed:moveTo(sprInteract.x + inDirX * 5,sprInteract.y + inDirY * 5 + yExtra)
+--        grabbed:setCollisionsEnabled(true)
+--        grabbed = nil
+--    end
     
     if grabbed then
         local yExtra = 0
         if inDirY > 0 then yExtra =  12 end
         grabbed:moveTo(playdate.math.lerp(grabbed.x, sprInteract.x + inDirX * 5, 0.4),playdate.math.lerp(grabbed.y, sprInteract.y + inDirY * 5 + yExtra, 0.4))
-
+        grabbed:setZIndex(grabbed.y)
     end
 
     if inX ~= 0 or inY ~= 0 then
