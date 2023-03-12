@@ -19,13 +19,12 @@ local playerAnimSpeed <const> = 2
 
 local sprPlayer = gfx.sprite.new(walks[1][1])
 local sprInteract = gfx.sprite.new()
-sprInteract:setCollideRect(-10,-10,20,40)
+sprInteract:setCollideRect(-15,-5,30,35)
 sprPlayer:setCollideRect(19,23,39,39)
-sprPlayer:setGroups({1})
 sprInteract:setGroups({2})
 sprPlayer:add()
 sprInteract:add()
-sprPlayer.name = "Player"
+sprPlayer.isPlayer = true
 local direction = 1
 local frame = 1
 local xVel, yVel = 0,0
@@ -59,7 +58,6 @@ function playerUpdate()
 
     sprPlayer:moveBy(xVel, 0)
     while #sprPlayer:overlappingSprites() > 0 do
-        print(#sprPlayer:overlappingSprites())
         sprPlayer:moveBy(sign(-xVel), 0)
     end
     sprPlayer:moveBy(0, yVel)
@@ -75,15 +73,16 @@ function playerUpdate()
         sprPlayer:setZIndex(sprPlayer.y + 10)
     end
 
-    sprInteract:moveTo(sprPlayer.x + inDirX * 40, sprPlayer.y - 10 + inDirY * 30)
+    sprInteract:moveTo(sprPlayer.x + inDirX * 38, sprPlayer.y - 10 + inDirY * 30)
 
     if playdate.buttonJustPressed(playdate.kButtonA) then
         if #sprInteract:overlappingSprites() > 0 and not grabbed then
-            grabbed = sprInteract:overlappingSprites()[1]
-            if grabbed:isa(GrabObject) then
+            local interacted = sprInteract:overlappingSprites()[1]
+            if interacted:isa(GrabObject) then
+                grabbed = interacted
                 grabbed:setCollisionsEnabled(false)
-            else
-                grabbed = nil
+            elseif interacted:isa(PushButton) or interacted:isa(TimedPushButton) then
+                interacted:press()
             end
         elseif grabbed and #sprInteract:overlappingSprites() < 1 then
             local yExtra = 0
