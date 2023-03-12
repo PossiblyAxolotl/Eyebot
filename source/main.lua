@@ -20,6 +20,7 @@ end
 local w = PopupWall(260,120)
 local ww = PopupWall(300,120)
 local pb = TimedButton(100,100,3000)
+local disb = PushButton(370,60)
 
 ww:popdown()
 
@@ -44,6 +45,12 @@ function playdate.update()
         ww:popdown()
         w:popup()
         print("rel")
+    end
+
+    if disb.pressed then
+        pb:disable()
+        ww:popdown()
+        w:popdown()
     end
 
     if pb:getTimeLeft() then

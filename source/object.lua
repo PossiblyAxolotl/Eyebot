@@ -97,12 +97,15 @@ function PushButton:init(x, y,permanent)
     self.toggled = false
     self.lp = false
     self.pressed = false
+    self.active = true
     self.permanent = permanent or false
 end
 
 function PushButton:press()
+    if self.active then
     self.pressed = true
     self.toggled = not self.toggled
+    end
 end
 
 function PushButton:update()
@@ -112,6 +115,32 @@ function PushButton:update()
         self.pressed = false
     end
 end
+
+function PushButton:disable()
+    self.active = false
+end
+
+function PushButton:enable()
+    self.active = true
+end
+
+function PushButton:justPressed()
+    if self.lp == false and self.pressed == true then
+        self.lp = true
+        return true
+    else
+        return false
+    end
+end
+
+function PushButton:justReleased()
+    if self.lp == true and self.pressed == false then
+        self.lp = false
+        return true
+    else
+        return false
+    end
+end  
 
 class("TimedButton").extends(PushButton)
 function PushButton:init(x, y,time)
@@ -125,6 +154,7 @@ function PushButton:init(x, y,time)
     self.timer = nil
     self.lp = false
     self.permanent = true
+    self.active = true
 end
 
 function TimedButton:release()
@@ -138,6 +168,14 @@ function TimedButton:update()
     end
 end
 
+function TimedButton:disable()
+    if self.timer then
+        self.timer:remove()
+        self.timer = nil
+    end
+    self.active = false
+end
+
 function TimedButton:getTimeLeft()
     if self.timer then 
         return math.ceil( (self.time - self.timer.currentTime)/1000 ) 
@@ -147,28 +185,12 @@ function TimedButton:getTimeLeft()
 end
 
 function TimedButton:press()
+    if self.active then
     self.pressed = true
     if self.timer then self.timer:remove() end
     self.timer = playdate.timer.new(self.time)
-end
-
-function TimedButton:justPressed()
-    if self.lp == false and self.pressed == true then
-        self.lp = true
-        return true
-    else
-        return false
     end
 end
-
-function TimedButton:justReleased()
-    if self.lp == true and self.pressed == false then
-        self.lp = false
-        return true
-    else
-        return false
-    end
-end  
 
 class("PopupWall").extends(gfx.sprite)
 function PopupWall:init(x, y)
