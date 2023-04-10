@@ -1,0 +1,8 @@
+{
+    "comment":"For props have them also include what type of button to have and where (ex) {type:popup,x:1,y:1,button:{type:push,x:1,y:10}}",
+    "name":"TestLevel 1",
+    "tiles":{},
+    "props":{}, 
+    "player":{"x":0,"y":0},
+    "exit":{"x":0,"y":0,"closed":false}
+}

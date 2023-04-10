@@ -23,6 +23,7 @@ sprInteract:setCollideRect(-15,-5,30,35)
 sprPlayer:setCollideRect(19,23,39,39)
 sprInteract:setGroups({2})
 sprPlayer:add()
+sprPlayer:setVisible(false)
 sprInteract:add()
 sprPlayer.isPlayer = true
 local direction = 1
@@ -38,6 +39,7 @@ local spawnX, spawnY = 0,0
 
 function playerSetup(x,y)
     sprPlayer:moveTo(x,y)
+    sprPlayer:setVisible(true)
     spawnX, spawnY = x, y
 end
 
