@@ -57,7 +57,13 @@ function ObjectButton:init(x, y)
     self:setGroups({3})
 end
 
+function objectButton:onPressed()
+end
+function objectButton:onReleased()
+end
+
 function ObjectButton:update()
+    if self.lp == false and self.pressed == true then self:onPressed() elseif self.lp == true and self.pressed == false then self:onReleased() end
     local sprs = self:overlappingSprites()
     self.lp = self.pressed
     for s = 1, #sprs, 1 do
@@ -101,6 +107,9 @@ function PushButton:init(x, y,permanent)
     self.permanent = permanent or false
 end
 
+function PushButton:onPressed()
+end
+
 function PushButton:press()
     if self.active then
     self.pressed = true
@@ -109,6 +118,10 @@ function PushButton:press()
 end
 
 function PushButton:update()
+    if self.lp == false and self.pressed == true then
+        self:onPressed()
+    end
+
     if self.pressed ~= self.lp then
         self.lp = self.pressed
     elseif not self.permanent then
@@ -176,6 +189,11 @@ function TimedButton:disable()
     self.active = false
 end
 
+function timedButton:onPressed()
+end
+
+function timedButton:onReleased()
+
 function TimedButton:getTimeLeft()
     if self.timer then 
         return math.ceil( (self.time - self.timer.currentTime)/1000 ) 
@@ -185,10 +203,14 @@ function TimedButton:getTimeLeft()
 end
 
 function TimedButton:press()
+    if self.active == true and self.pressed == false then
+        self:onPressed()
+    end
     if self.active then
     self.pressed = true
     if self.timer then self.timer:remove() end
     self.timer = playdate.timer.new(self.time)
+    self:onReleased()
     end
 end
 
