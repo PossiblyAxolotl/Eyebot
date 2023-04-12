@@ -138,9 +138,9 @@ local function slotsUpdate()
             selS, selR, selC = slots:getSelection()
             if sel == selR + 2* (selC-1) then
                 confirmdeny:setSelection(1,1,1)
-                if sel == 1 then fullTrans = beginIntro transIn() saveslot = 1 end
-                if sel == 3 then fullTrans = beginIntro transIn() saveslot = 2 end
-                if sel == 5 then fullTrans = beginIntro transIn() saveslot = 3 end
+                if sel == 1 then if sdata[1] == nil then fullTrans = beginIntro else fullTrans = function() loadLevel("levels/example.json") mode = "game" end end transIn() saveslot = 1 end
+                if sel == 3 then if sdata[2] == nil then fullTrans = beginIntro else fullTrans = function() loadLevel("levels/example.json") mode = "game" end end transIn() saveslot = 2 end
+                if sel == 5 then if sdata[3] == nil then fullTrans = beginIntro else fullTrans = function() loadLevel("levels/example.json") mode = "game" end end transIn() saveslot = 3 end
                 if sel == 2 then menuID = 9 confirmdenyY = 50 confMessage = "Delete Save 1?" deny = function() menuID = 1 end confirm = function() playdate.datastore.delete("saves/slot1") sdata[1] = nil menuID = 1 end end
                 if sel == 4 then menuID = 9 confirmdenyY = 50 confMessage = "Delete Save 2?" deny = function() menuID = 1 end confirm = function() playdate.datastore.delete("saves/slot2") sdata[2] = nil menuID = 1 end end
                 if sel == 6 then menuID = 9 confirmdenyY = 50 confMessage = "Delete Save 3?" deny = function() menuID = 1 end confirm = function() playdate.datastore.delete("saves/slot3") sdata[3] = nil menuID = 1 end end
@@ -204,8 +204,7 @@ end
 local function confirmUpdate()
     slots:drawInRect(0,0,400,240)
     confirmdeny:drawInRect(0, 0, 400,240)
-    playdate.timer.updateTimers()
-    
+        
         if playdate.buttonJustPressed(playdate.kButtonA) then
             selS, selR, selC = confirmdeny:getSelection()
             sel = selR

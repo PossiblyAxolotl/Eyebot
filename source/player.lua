@@ -23,6 +23,7 @@ sprInteract:setCollideRect(-15,-5,30,35)
 sprPlayer:setCollideRect(19,23,39,39)
 sprInteract:setGroups({2})
 sprPlayer:add()
+sprPlayer:setGroups({1})
 sprPlayer:setVisible(false)
 sprInteract:add()
 sprPlayer.isPlayer = true

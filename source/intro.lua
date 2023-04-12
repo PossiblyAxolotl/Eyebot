@@ -33,7 +33,7 @@ function introUpdate()
 
         if frame > 70 and framerate > 0.35 then framerate = 0.3
         elseif frame > 65 and framerate > 0.35 then framerate = 0.4 end
-        if frame >= 90 and frame < 90.5 then fullTrans = function() mode = "menu" end transIn() createSave() end
+        if frame >= 90 and frame < 90.5 then fullTrans = function() loadLevel("levels/example.json") mode = "game" end transIn() createSave() end
     --[[else
         if gridY < 240 then gridY += 4 end
         gridX += 4

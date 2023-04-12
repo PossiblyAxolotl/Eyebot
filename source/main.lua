@@ -5,6 +5,7 @@ import "CoreLibs/object"
 import "CoreLibs/math"
 import "CoreLibs/timer"
 import "CoreLibs/ui"
+import "loadJson.lua"
 import "transi.lua"
 import "saves.lua"
 import "object.lua"
@@ -24,12 +25,19 @@ function sign(x)
 end
 
 function playdate.update()
+    print(mode)
     gfx.clear()
     if mode == "menu" then
         titleuiUpdate()
-        Particles:update()
     elseif mode == "intro" then
         introUpdate()
+    elseif mode == "game" then
+        playerUpdate()
+        updateButtons()
+        gfx.sprite.update()
+        tilemap:draw(0,0)
     end
+    playdate.timer.updateTimers()
+    Particles:update()
     trans()
 end

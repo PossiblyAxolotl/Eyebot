@@ -57,9 +57,9 @@ function ObjectButton:init(x, y)
     self:setGroups({3})
 end
 
-function objectButton:onPressed()
+function ObjectButton:onPressed()
 end
-function objectButton:onReleased()
+function ObjectButton:onReleased()
 end
 
 function ObjectButton:update()
@@ -178,6 +178,7 @@ end
 function TimedButton:update()
     if self.timer and self.timer.currentTime >= self.time then
         self:release()
+        self:onReleased()
     end
 end
 
@@ -189,10 +190,11 @@ function TimedButton:disable()
     self.active = false
 end
 
-function timedButton:onPressed()
+function TimedButton:onPressed()
 end
 
-function timedButton:onReleased()
+function TimedButton:onReleased()
+end
 
 function TimedButton:getTimeLeft()
     if self.timer then 
@@ -203,14 +205,11 @@ function TimedButton:getTimeLeft()
 end
 
 function TimedButton:press()
-    if self.active == true and self.pressed == false then
-        self:onPressed()
-    end
+    self:onPressed()
     if self.active then
     self.pressed = true
     if self.timer then self.timer:remove() end
     self.timer = playdate.timer.new(self.time)
-    self:onReleased()
     end
 end
 
