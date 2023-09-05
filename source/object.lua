@@ -4,6 +4,7 @@ local objects <const> = {gfx.image.new("gfx/box")}
 local btn <const> = gfx.image.new("gfx/button")
 local pbtn <const> = gfx.image.new("gfx/pushbutton")
 local wall <const> = {gfx.image.new('gfx/wallUp'),gfx.image.new('gfx/wallDown')}
+local tabButton <const> = gfx.imagetable.new("gfx/buttonAnimated")
 import "pdParticles.lua"
 
 class("GrabObject").extends(gfx.sprite)
@@ -49,10 +50,11 @@ class("ObjectButton").extends(gfx.sprite)
 function ObjectButton:init(x, y)
     self:moveTo(x,y)
     self:setImage(btn)
-    self:setCollideRect(0,0,32,32)
+    self:setCollideRect(2,0,43,20)
     self:add()
     self.pressed = false
     self.lp = false
+    self.animFrame = 0
     self:setZIndex(0)
     self:setGroups({3})
 end
@@ -68,13 +70,18 @@ function ObjectButton:update()
     self.lp = self.pressed
     for s = 1, #sprs, 1 do
         if sprs[s]:isa(GrabObject) or sprs[s].isPlayer then
+            self.animFrame += 1
+            self:setImage(tabButton[math.ceil(self.animFrame / 60 * 2)+1])
             self.pressed = true
+            if self.animFrame > 59 then self.animFrame = 0 end
+            sprs[s].fall = 0
+            sprs[s]:moveTo(playdate.math.lerp(sprs[s].x,self.x + 12- (sprs[s].width/2), 0.1),playdate.math.lerp(sprs[s].y,self.y + 3- (sprs[s].height/2), 0.1))
             break
         end
         self.pressed = false
     end
 
-    if #sprs < 1 then self.pressed = false end
+    if #sprs < 1 then self.pressed = false self:setImage(tabButton[1]) self.animFrame = 0 end
 end
 
 function ObjectButton:justPressed()

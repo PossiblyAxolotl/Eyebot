@@ -29,7 +29,7 @@ function trans()
             transing = 0
         end
     end
-
+    
     gfx.setColor(gfx.kColorBlack)
     gfx.fillRect(0,topY,400,botY)
 end

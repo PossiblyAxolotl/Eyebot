@@ -19,7 +19,7 @@ local playerAnimSpeed <const> = 2
 
 local sprPlayer = gfx.sprite.new(walks[1][1])
 local sprInteract = gfx.sprite.new()
-sprInteract:setCollideRect(-15,-5,30,35)
+sprInteract:setCollideRect(-15,-5,30,30)
 sprPlayer:setCollideRect(19,23,39,39)
 sprInteract:setGroups({2})
 sprPlayer:add()
@@ -42,6 +42,11 @@ function playerSetup(x,y)
     sprPlayer:moveTo(x,y)
     sprPlayer:setVisible(true)
     spawnX, spawnY = x, y
+    resetCamVars()
+end
+
+function getPlayerPos()
+    return sprPlayer.x, sprPlayer.y
 end
 
 function playerUpdate()
